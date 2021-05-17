@@ -5,17 +5,18 @@ const log = document.getElementById('log');
 const roomSelector = document.getElementById('roomSelector');
 const input = document.querySelector("input[type='text']");
 
-console.log('hej')
+console.log('hej123')
+socket.emit('askForQuestion')
 
+socket.on('question', payload => {
+  console.log(payload.array)
 
-socket.on('question', msg => {
-    console.log('hej2')
-    q.innerHTML  = msg;
+  q.innerHTML = payload.question
 })
 /*
 socket.on("message", message => {
-    const span = document.createElement("span");  
-    span.style.display = "block";  
+    const span = document.createElement("span");
+    span.style.display = "block";
     span.textContent = message;
     log.appendChild(span);
   });
