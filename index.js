@@ -23,34 +23,54 @@ function question(data) {
     array[j] = temp;
   }
   let question = data.question
-  //console.log(array)
   return { question, array }
 }
 
-
 app.use(express.static(path.join(__dirname, '/Public')))
 
+let player = null
+let activeRoom = 'playerRoom'
+
+const sendQuestion = async (socket) => {
+  const response = await axios.get('https://opentdb.com/api.php?amount=1&category=11&difficulty=medium&type=multiple')
+  // console.log(response.data.results[0])
+  let data = response.data.results[0]
+  socket.emit('question', question(data))
+}
+
 io.of("/").on("connect", (socket) => {
-
-
+  if (player === null) {
+    player = socket.id
+    console.log(activeRoom)
+    socket.join('playerRoom')
+    sendQuestion(socket)
+    console.log('player')
+  } else {
+    activeRoom = 'SpectatorRoom'
+    console.log(activeRoom)
+    socket.join('SpectatorRoom')
+    console.log('spectator')
+  }
   console.log(`client with id ${socket.id} connected`);
-  socket.on('askForQuestion', async () => {
-    console.log('inne i funktion')
-    const response = await axios.get('https://opentdb.com/api.php?amount=1&category=11&difficulty=medium&type=multiple')
-    // console.log(response.data.results[0])
-    let data = response.data.results[0]
 
-    socket.emit('question', question(data))
-    console.log(correctAnswer)
+  socket.on('checkAnswer', answer => {
+    if (correctAnswer === answer) {
+      console.log('correct')
+    } else {
+      console.log('ERRORRRR')
+    }
   })
   /* socket.emit('question', msg => {
       io.of('/').emit('question', `${msg.array}`)
     })
-    socket.send(`Hello Player ${socket.id}, lets start the game`);
-    socket.on("disconnect", () => {
-      console.log(`client with id ${socket.id} disconnected`);
-    });
-  */
+    socket.send(`Hello Player ${socket.id}, lets start the game`);*/
+  socket.on("disconnect", () => {
+    if (socket.id === player) {
+      player = null
+    }
+    console.log(`client with id ${socket.id} disconnected`);
+  });
+
 });
 
 httpServer.listen(3000, () => {
