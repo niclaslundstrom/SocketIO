@@ -13,15 +13,22 @@
 </head>
 
 <body>
-  <h1>Hello World!</h1>
-  <h2 id='q'></h2>
-  <p>just testing</p>
+  <h1>Lets play!</h1>
+
+  <h3 id='q'></h3>
+
+
   <div id='buttons' hidden=true>
     <button id="answer1" onClick=answer(answer1) type="button" class="btn btn-primary"></button>
     <button id="answer2" onClick=answer(answer2) type="button" class="btn btn-primary"></button>
     <button id="answer3" onClick=answer(answer3) type="button" class="btn btn-primary"></button>
     <button id="answer4" onClick=answer(answer4) type="button" class="btn btn-primary"></button>
   </div>
+  <div id='spectatorMessage' hidden=true>
+    <h2>Player connected!</h2>
+    <div id='log'> detta är loggen</div>
+  </div>
+
   <script src="client.js"></script>
 </body>
 

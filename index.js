@@ -7,7 +7,7 @@ const httpServer = http.createServer(app)
 const io = require('socket.io')(httpServer)
 
 
-let correctAnswer
+let correctAnswer = null
 function question(data) {
   // console.log(data.question);
   let array = [];
@@ -30,12 +30,13 @@ app.use(express.static(path.join(__dirname, '/Public')))
 
 let player = null
 let activeRoom = 'playerRoom'
-
+let data = null
 const sendQuestion = async (socket) => {
   const response = await axios.get('https://opentdb.com/api.php?amount=1&category=11&difficulty=medium&type=multiple')
   // console.log(response.data.results[0])
-  let data = response.data.results[0]
+  data = response.data.results[0]
   socket.emit('question', question(data))
+
 }
 
 io.of("/").on("connect", (socket) => {
@@ -44,10 +45,12 @@ io.of("/").on("connect", (socket) => {
     console.log(activeRoom)
     socket.join('playerRoom')
     sendQuestion(socket)
+
     console.log('player')
   } else {
     activeRoom = 'SpectatorRoom'
     console.log(activeRoom)
+    // socket.emit('spectatorQ', question(data))
     socket.join('SpectatorRoom')
     console.log('spectator')
   }
@@ -56,8 +59,15 @@ io.of("/").on("connect", (socket) => {
   socket.on('checkAnswer', answer => {
     if (correctAnswer === answer) {
       console.log('correct')
+      sendQuestion(socket)
+      io.in('SpectatorRoom').emit('spectatorQ', question(data))
+      io.in('SpectatorRoom').emit('spectatorA', { answer, correct: 'Correct' })
     } else {
       console.log('ERRORRRR')
+      sendQuestion(socket)
+      io.in('SpectatorRoom').emit('spectatorQ', question(data))
+      io.in('SpectatorRoom').emit('spectatorA', { answer, correct: 'Incorrect' })
+
     }
   })
   /* socket.emit('question', msg => {
