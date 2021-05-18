@@ -36,7 +36,7 @@ const sendQuestion = async (socket) => {
   // console.log(response.data.results[0])
   data = response.data.results[0]
   socket.emit('question', question(data))
-
+  io.in('SpectatorRoom').emit('spectatorQ', question(data))
 }
 
 io.of("/").on("connect", (socket) => {
@@ -53,6 +53,7 @@ io.of("/").on("connect", (socket) => {
     // socket.emit('spectatorQ', question(data))
     socket.join('SpectatorRoom')
     console.log('spectator')
+    socket.emit('spectatorQ', question(data))
   }
   console.log(`client with id ${socket.id} connected`);
 
@@ -60,12 +61,12 @@ io.of("/").on("connect", (socket) => {
     if (correctAnswer === answer) {
       console.log('correct')
       sendQuestion(socket)
-      io.in('SpectatorRoom').emit('spectatorQ', question(data))
+      //io.in('SpectatorRoom').emit('spectatorQ', question(data))
       io.in('SpectatorRoom').emit('spectatorA', { answer, correct: 'Correct' })
     } else {
       console.log('ERRORRRR')
       sendQuestion(socket)
-      io.in('SpectatorRoom').emit('spectatorQ', question(data))
+      // io.in('SpectatorRoom').emit('spectatorQ', question(data))
       io.in('SpectatorRoom').emit('spectatorA', { answer, correct: 'Incorrect' })
 
     }
