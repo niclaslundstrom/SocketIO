@@ -7,26 +7,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
-
+  <link rel="stylesheet" href="index.css">
   <script src="/socket.io/socket.io.js"></script>
   <title>Quiz</title>
 </head>
 
 <body>
-  <h1>Lets play!</h1>
+  <h1>Lets play the Quiz!</h1>
 
   <h3 id='q'></h3>
 
-
   <div id='buttons' hidden=true>
-    <button id="answer1" onClick=answer(answer1) type="button" class="btn btn-primary"></button>
-    <button id="answer2" onClick=answer(answer2) type="button" class="btn btn-primary"></button>
-    <button id="answer3" onClick=answer(answer3) type="button" class="btn btn-primary"></button>
-    <button id="answer4" onClick=answer(answer4) type="button" class="btn btn-primary"></button>
+    <button id="answer1" onClick=answer(answer1) type="button" class="btn btn-info"></button>
+    <button id="answer2" onClick=answer(answer2) type="button" class="btn btn-info"></button>
+    <button id="answer3" onClick=answer(answer3) type="button" class="btn btn-info"></button>
+    <button id="answer4" onClick=answer(answer4) type="button" class="btn btn-info"></button>
   </div>
+
   <div id='spectatorMessage' hidden=true>
-    <h2>Player connected!</h2>
-    <div id='log'> detta är loggen</div>
+    <p id='play'>Player Connected</p>
+    <div id='log'></div>
   </div>
 
   <script src="client.js"></script>

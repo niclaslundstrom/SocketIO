@@ -1,6 +1,8 @@
+
 const socket = io('/');
 
 const q = document.getElementById('q')
+const play = document.getElementById('play')
 const buttons = document.getElementById('buttons')
 const answer1 = document.getElementById('answer1')
 const answer2 = document.getElementById('answer2')
@@ -25,35 +27,33 @@ socket.on('question', payload => {
 function answer(value) {
   let answer = (value.innerHTML)
   socket.emit('checkAnswer', answer)
-
 }
-socket.on('spectatorQ', payload => {
-  const span = document.createElement("span");
-  span.style.display = "block";
-  span.textContent = payload.question;
-  log.appendChild(span);
-  console.log(payload)
-  spectatorMessage.hidden = false
-})
-socket.on('spectatorA', ({ answer, correct }) => {
-  const span = document.createElement("span");
-  span.style.display = "block";
-  span.textContent = answer + ' (' + correct + ')'
-  log.appendChild(span);
 
+socket.on('spectatorQ', payload => {
+
+  const span = document.createElement('span')
+  span.style.display = 'block'
+  span.id = 'question'
+  span.textContent = 'Question: ' + payload.question
+  log.appendChild(span)
   spectatorMessage.hidden = false
 })
-/*
-function spectatorQ(payload) {
-  //console.log('hej inne i spectatorQ')
-  const span = document.createElement("span");
-  span.style.display = "block";
-  span.textContent = payload.question;
-  log.appendChild(span);
-  console.log(payload)
+
+socket.on('spectatorA', ({ answer, correct }) => {
+  const span = document.createElement('span')
+  span.style.display = 'block'
+  span.id = 'answer'
+  span.textContent = 'Player answer: ' + answer + ' (' + correct + ')'
+  log.appendChild(span)
   spectatorMessage.hidden = false
-}*/
-/*
-function changeRoom() {
-    socket.emit('joinRoom', roomSelector.value);
-}*/
+})
+
+socket.on('playerDisconnect', player => {
+  console.log(`client disconnected`)
+  if (player === null) {
+    play.innerHTML = 'Player disconnected'
+    window.location.reload()
+  }
+})
+
+
