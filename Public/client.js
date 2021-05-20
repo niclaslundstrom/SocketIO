@@ -1,7 +1,6 @@
+const socket = io('/')
 
-const socket = io('/');
-
-const q = document.getElementById('q')
+const playerQ = document.getElementById('playerQ')
 const play = document.getElementById('play')
 const buttons = document.getElementById('buttons')
 const answer1 = document.getElementById('answer1')
@@ -15,13 +14,11 @@ const log = document.getElementById('log')
 
 socket.on('question', payload => {
   buttons.hidden = false
-
-  q.innerHTML = payload.question
+  playerQ.innerHTML = payload.question
   answer1.innerHTML = payload.array[0]
   answer2.innerHTML = payload.array[1]
   answer3.innerHTML = payload.array[2]
   answer4.innerHTML = payload.array[3]
-
 })
 
 function answer(value) {
@@ -30,7 +27,6 @@ function answer(value) {
 }
 
 socket.on('spectatorQ', payload => {
-
   const span = document.createElement('span')
   span.style.display = 'block'
   span.id = 'question'
@@ -49,7 +45,6 @@ socket.on('spectatorA', ({ answer, correct }) => {
 })
 
 socket.on('playerDisconnect', player => {
-  console.log(`client disconnected`)
   if (player === null) {
     play.innerHTML = 'Player disconnected'
     window.location.reload()
