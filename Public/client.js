@@ -26,11 +26,18 @@ function answer(value) {
   socket.emit('checkAnswer', answer)
 }
 
+let num = 1
+function increaseNumber() {
+  num++
+  return num
+}
+
 socket.on('spectatorQ', payload => {
   const span = document.createElement('span')
   span.style.display = 'block'
   span.id = 'question'
-  span.textContent = 'Question: ' + payload.question
+  span.textContent = 'Question ' + num + ': ' + payload.question
+  increaseNumber()
   log.appendChild(span)
   spectatorMessage.hidden = false
 })
