@@ -1,4 +1,5 @@
 # SocketIO
 
-clone https://github.com/Siia87/Bookstore.git
+clone https://https://github.com/niclaslundstrom/SocketIO.git
+
 npm install
